@@ -3,7 +3,6 @@
 
 from database import *
 import datetime
-import logic
 
 def run_test():
 
@@ -31,7 +30,7 @@ def run_test():
     }
     user2_id = users.insert_one(user2).inserted_id
 
-    logic.add_user("recai","deli","testerrecai@seyahdoo.com","4321","05062604798")
+    add_user("recai","deli","testerrecai@seyahdoo.com","4321","05062604798")
 
 
 if __name__ == "__main__":

@@ -117,7 +117,6 @@ def signup():
 
 appointments = []
 
-
 @app.route("/appointment", methods=["GET"])
 def appointment_see():
     """"See appointment dialog"""
@@ -126,21 +125,25 @@ def appointment_see():
         list(users.find({"role": "doctor"})),
         default=json_util.default)
 
-    print(doctors);
+    print(doctors)
 
     session["doctors"] = doctors
 
 
-    patients =json.dumps(
+    patients = json.dumps(
         list(users.find({"role": "patient"})),
         default=json_util.default)
 
-    session["patients"] = patients
+    print (patients)
+    
+    #patientslist = patients
+    session["patientslist"] = json.dumps(patients)
 
-    session["taken_appointments"] = json.dumps(appointments)
+    #session["taken_appointments"] = json.dumps(appointments)
 
     return render_template("appointment.html",
-                           appointments=appointments)
+                           appointments=appointments,
+                           patientslist=patients)
 
 
 @app.route("/appointment", methods=["POST"])

@@ -18,11 +18,9 @@
   <div class="form-group">
       <label for="sel1">Patient</label>
       <select class="form-control" id="sel1" name="patient">
-        {% if patients %}
-          {% for patient in patients %}
-            <option>{{patient.name}} {{patient.surname}}</option>
+          {% for p in patientslist %}
+              <option>{{p.first_name}} {{p.last_name}}</option>
           {% endfor %}
-        {% endif %}
       </select>
   </div>
 
