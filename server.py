@@ -11,6 +11,7 @@ from db import *
 
 from bson import json_util
 import json
+from util import JSONEncoder
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.environ.get("FLASK_SECRET_KEY", "abcdef")
@@ -125,8 +126,7 @@ def appointment_see():
     patients = list(users.find({"role": "patient"}))
     doctors = list(users.find({"role": "doctor"}))
     appointment_list = list(appointments.find())
-
-    print(appointment_list)
+    appointment_list = JSONEncoder().encode(appointment_list)
 
     return render_template("appointment.html",
                            appointment_list=appointment_list,
@@ -140,15 +140,20 @@ def appointment_grab():
 
     date = request.form.get("appointment_date")
     time = request.form.get("appointment_time")
+    doctor_name = request.form.get("doctor")
+    patient_name = request.form.get("patient")
 
-    #if (date, time) in appointments:
+    if appointments.find_one({"date":date,"time":time}):
+        flash("This appointment is taken!!! Unsuccessful!!!.", "danger")
+        return redirect("/appointment")
 
-    #    flash("This appointment is taken!!! Unsuccessful!!!.", "danger")
-    #    return redirect("/appointment")
+    appointments.insert_one({
+        "date": date,
+        "time": time,
+        "doctor_name":doctor_name,
+        "patient_name":patient_name})
 
-    appointments.insert_one({"date": date, "time": time})
     flash("Successfully grabbed appointment. Congrats!!!", "success")
-
     return redirect("/appointment")
 
 

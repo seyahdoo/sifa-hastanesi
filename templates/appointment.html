@@ -52,7 +52,7 @@
     appointments = JSON.parse( he.decode("{{ appointment_list }}") )
     {% endif %}
 
-    debug.log(appointments)
+    console.log(appointments)
 
     $( "#timepicker" ).pickatime({
       clear: '',
