@@ -18,8 +18,8 @@
   <div class="form-group">
       <label for="sel1">Patient</label>
       <select class="form-control" id="sel1" name="patient">
-          {% for p in patientslist %}
-              <option>{{p.first_name}} {{p.last_name}}</option>
+          {% for p in patients %}
+              <option>{{ p.first_name }} {{ p.last_name }}</option>
           {% endfor %}
       </select>
   </div>
@@ -27,10 +27,9 @@
   <div class="form-group">
       <label for="sel1">Doctor</label>
       <select class="form-control" id="sel2" name="doctor">
-        <option>1</option>
-        <option>2</option>
-        <option>3</option>
-        <option>4</option>
+        {% for d in doctors %}
+            <option>{{ d.first_name }} {{ d.last_name }}</option>
+        {% endfor %}
       </select>
   </div>
 
@@ -49,9 +48,11 @@
   <script>
   $( function() {
 
-    {% if session.get('taken_appointments') %}
-    appointments = JSON.parse( he.decode("{{ session.taken_appointments }}") )
+    {% if appointment_list %}
+    appointments = JSON.parse( he.decode("{{ appointment_list }}") )
     {% endif %}
+
+    debug.log(appointments)
 
     $( "#timepicker" ).pickatime({
       clear: '',

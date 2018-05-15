@@ -1,10 +1,13 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import os
 
 from jinja2 import StrictUndefined
 
 from flask import Flask, render_template, redirect, request, flash, session, jsonify
 
-from database import *
+from db import *
 
 from bson import json_util
 import json
@@ -115,35 +118,20 @@ def signup():
     return redirect("/login")
 
 
-appointments = []
-
 @app.route("/appointment", methods=["GET"])
 def appointment_see():
     """"See appointment dialog"""
 
-    doctors = json.dumps(
-        list(users.find({"role": "doctor"})),
-        default=json_util.default)
+    patients = list(users.find({"role": "patient"}))
+    doctors = list(users.find({"role": "doctor"}))
+    appointment_list = list(appointments.find())
 
-    print(doctors)
-
-    session["doctors"] = doctors
-
-
-    patients = json.dumps(
-        list(users.find({"role": "patient"})),
-        default=json_util.default)
-
-    print (patients)
-    
-    #patientslist = patients
-    session["patientslist"] = json.dumps(patients)
-
-    #session["taken_appointments"] = json.dumps(appointments)
+    print(appointment_list)
 
     return render_template("appointment.html",
-                           appointments=appointments,
-                           patientslist=patients)
+                           appointment_list=appointment_list,
+                           patients=patients,
+                           doctors=doctors)
 
 
 @app.route("/appointment", methods=["POST"])
@@ -153,12 +141,12 @@ def appointment_grab():
     date = request.form.get("appointment_date")
     time = request.form.get("appointment_time")
 
-    if (date, time) in appointments:
+    #if (date, time) in appointments:
 
-        flash("This appointment is taken!!! Unsuccessful!!!.", "danger")
-        return redirect("/appointment")
+    #    flash("This appointment is taken!!! Unsuccessful!!!.", "danger")
+    #    return redirect("/appointment")
 
-    appointments.append({"date": date, "time": time})
+    appointments.insert_one({"date": date, "time": time})
     flash("Successfully grabbed appointment. Congrats!!!", "success")
 
     return redirect("/appointment")

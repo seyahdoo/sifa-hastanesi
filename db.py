@@ -1,7 +1,10 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from pymongo import MongoClient
 import datetime
 
-DATABASE_NAME = "issue-tracker"
+DATABASE_NAME = "sifa-hastanesi"
 
 client = MongoClient()
 
@@ -16,7 +19,8 @@ def add_user(
         last_name,
         email,
         password,
-        phone_number):
+        phone_number,
+        role = "patient"):
 
     u = {
         "phone_number": phone_number,
@@ -24,23 +28,8 @@ def add_user(
         "password": password,
         "first_name": first_name,
         "last_name": last_name,
-        "role": "patient"
+        "role": role
     }
     user_id = users.insert_one(u).inserted_id
 
     return user_id
-
-
-
-
-if __name__ == "__main__":
-
-    user = {"author": "mikey",
-            "text": "My first blog post!",
-            "tags": ["mongodb", "python", "pymongo"],
-            "date": datetime.datetime.utcnow()}
-
-
-    #post_id = posts.insert_one(post).inserted_id
-
-    #print(post_id)
