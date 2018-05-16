@@ -55,8 +55,6 @@ def login():
         flash("The email or password you have entered did not match our records. Please try again.", "danger")
         return redirect("/login")
 
-    print(current_user)
-
     # Use a nested dictionary for session["current_user"] to store more than just user_id
     session["current_user"] = {
         "first_name": current_user["first_name"],
@@ -109,7 +107,8 @@ def signup():
         # Add same info to session for new user as per /login route
         session["current_user"] = {
             "first_name": new_user["first_name"],
-            "user_id": str(new_user_id)
+            "user_id": str(new_user_id),
+            "role": new_user["role"]
         }
 
         flash("You have succesfully signed up for an account, and you are now logged in.", "success")
