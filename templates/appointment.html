@@ -17,7 +17,7 @@
 
   <div class="form-group">
       <label for="sel1">Patient</label>
-      <select class="form-control" id="sel1" name="patient">
+      <select class="form-control" id="patientpicker" name="patient">
           {% for p in patients %}
               <option>{{ p.first_name }} {{ p.last_name }}</option>
           {% endfor %}
@@ -26,7 +26,7 @@
 
   <div class="form-group">
       <label for="sel1">Doctor</label>
-      <select class="form-control" id="sel2" name="doctor">
+      <select class="form-control" id="doctorpicker" name="doctor">
         {% for d in doctors %}
             <option>{{ d.first_name }} {{ d.last_name }}</option>
         {% endfor %}
@@ -75,18 +75,20 @@
 
     var updateTimes = function(){
       if(appointments){
+        console.log($( "#doctorpicker" ).val());
 
         var todisable = []
         var arrayLength = appointments.length;
         for (var i = 0; i < arrayLength; i++) {
+          if(appointments[i].doctor_name == $( "#doctorpicker" ).val()){
+            if(appointments[i].date == $( "#datepicker" ).val()){
+              s = appointments[i].time;
+              parts = s.match(/(\d+)\:(\d+) (\w+)/);
+              hours = /am/i.test(parts[3]) ? parseInt(parts[1], 10) : parseInt(parts[1], 10) + 12;
+              minutes = parseInt(parts[2], 10);
 
-          if(appointments[i].date == $( "#datepicker" ).val()){
-            s = appointments[i].time;
-            parts = s.match(/(\d+)\:(\d+) (\w+)/);
-            hours = /am/i.test(parts[3]) ? parseInt(parts[1], 10) : parseInt(parts[1], 10) + 12;
-            minutes = parseInt(parts[2], 10);
-
-            todisable.push([hours,minutes]);
+              todisable.push([hours,minutes]);
+            }
           }
         }
 
@@ -95,6 +97,10 @@
         $( "#timepicker" ).pickatime('set').set('disable',todisable);
       }
     };
+
+    $('#doctorpicker').change(function(){
+      updateTimes();
+    });
 
     $('#datepicker').change(function(){
       updateTimes();
