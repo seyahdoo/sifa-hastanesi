@@ -21,7 +21,6 @@ def add_user(
         password,
         phone_number,
         role = "patient"):
-"""Add a user to database"""
 
     u = {
         "phone_number": phone_number,
